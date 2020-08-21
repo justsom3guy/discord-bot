@@ -10,12 +10,12 @@ class Welcome(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         welcome_cl = self.bot.get_channel(self.channel_id)
-        await welcome_cl.send(f'{member.name} joined <3')
+        await welcome_cl.send(f'{member.name} joined')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         welcome_cl = self.bot.get_channel(self.channel_id)
-        await welcome_cl.send(f'{member.name} left.Alexa play despacito')
+        await welcome_cl.send(f'{member.name} left.')
 
 
 def setup(bot):

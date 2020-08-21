@@ -10,6 +10,10 @@ class Main(commands.Cog):
     async def on_ready(self):
         print(f'{self.bot.user.name} has connected to Discord!')
 
+    @commands.command(help='Delete msgs with sepecific limit')
+    async def delete(self, message, number=1):
+        await message.channel.purge(limit=int(number))
+
 
 def setup(bot):
     bot.add_cog(Main(bot))

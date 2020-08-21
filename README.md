@@ -13,7 +13,8 @@ A discord bot made to have fun with friends on a server
 
 In .env
 
-    DISCORD_TOKEN={token}
+    DISCORD_TOKEN='token'
+    MONGO_HOST='mongo_uri'
 
 ## To Start
 
