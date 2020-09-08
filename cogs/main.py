@@ -12,7 +12,7 @@ class Main(commands.Cog):
 
     @commands.command(help='Delete msgs with sepecific limit')
     async def delete(self, message, number=1):
-        await message.channel.purge(limit=int(number))
+        await message.channel.purge(limit=int(number)+1)
 
 
 def setup(bot):
