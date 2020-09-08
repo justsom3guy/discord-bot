@@ -5,18 +5,21 @@ from discord.ext import commands
 class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.channel_id = 743710240423411755
+        self.channel_name = "general"
 
     @commands.command(help='Replies with pong')
     async def ping(self, ctx):
-        if ctx.channel.id == self.channel_id:
-            await ctx.send('pong')
+        guild = ctx.guild
+        channel = discord.utils.get(guild.channels, name=self.channel_name)
+        if ctx.channel.name == channel.name:
+            await channel.send('pong')
 
     @commands.command(help='Says hello back')
     async def hello(self, ctx):
-        if ctx.channel.id == self.channel_id:
-            response = f'Hello {ctx.author} <3'
-            await ctx.channel.send(response)
+        guild = ctx.guild
+        channel = discord.utils.get(guild.channels, name=self.channel_name)
+        response = f'Hello {channel.author} <3'
+        await channel.channel.send(response)
 
 
 def setup(bot):
