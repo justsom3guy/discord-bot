@@ -43,8 +43,8 @@ class Game(commands.Cog):
     async def findMonster(self, ctx):
         guild = ctx.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
-        chances = [1, 0, 1, 0, 1, 1, 0, 1, 0, 1]
-        if random.choice(chances):
+        chance = bool(random.getrandbits(1))
+        if chance:
             if ctx.channel.name == channel.name:
                 monster = random.choice(Monster.objects)
                 response = f'You found {monster.name}'
@@ -69,14 +69,27 @@ class Game(commands.Cog):
                 response = f'New monster {monster.name} is born in this world'
                 await channel.send(response)
 
+    @createMonster.error
+    async def createMonster_handler(self, ctx, error):
+        guild = ctx.guild
+        channel = discord.utils.get(guild.channels, name=self.channel_name)
+        if ctx.channel.name == channel.name:
+            if isinstance(error, commands.errors.MissingRole):
+                response = 'You dont have enough privlages'
+                await channel.send(response)
+
+            if isinstance(error, commands.MissingRequiredArgument):
+                response = 'You didn\'t provide a name for the monster'
+                await channel.send(response)
+
     @commands.command(help="Delete player data")
     async def unregister(self, ctx):
         guild = ctx.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
         if ctx.channel.name == channel.name:
             try:
-                user = User.objects(name=str(ctx.author)).get()
-                response = f'{user.name} of level {user.level} exists!!'
+                user = User.objects(name=str(ctx.author)).delete()
+                response = f'Player delete :/'
                 await channel.send(response)
             except DoesNotExist:
                 response = f'Player named {ctx.author} does not exist.'
