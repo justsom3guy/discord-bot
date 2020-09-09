@@ -18,7 +18,7 @@ class General(commands.Cog):
     async def hello(self, ctx):
         guild = ctx.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
-        response = f'Hello {ctx.author} <3'
+        response = f'Hello {ctx.author[:-5]} <3'
         await channel.send(response)
 
 

@@ -11,13 +11,13 @@ class Welcome(commands.Cog):
     async def on_member_join(self, member):
         guild = member.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
-        await channel.send(f'{member.name} joined')
+        await channel.send(f'{member.name[:-5]} joined')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         guild = member.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
-        await channel.send(f'{member.name} left.')
+        await channel.send(f'{member.name[:-5]} left.')
 
 
 def setup(bot):

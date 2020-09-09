@@ -4,14 +4,14 @@ from database.monster import Monster
 
 class User(Document):
     name = StringField(required=True, unique=True)
-    player_level = IntField(default=0)
+    level = IntField(default=0)
     xp = IntField(default=0)
-    floor_level = IntField(default=0)
-    monster_fought = IntField(default=0)
-    infight = BooleanField(default=False)
+    floorLevel = IntField(default=0)
+    monsterFought = IntField(default=0)
+    inFight = BooleanField(default=False)
     health = IntField(default=100)
     floorReached = IntField(default=0)
-    monster_fighting = ReferenceField(Monster)
+    monsterFighting = ReferenceField(Monster)
 
     def winFight(self):
         pass
