@@ -26,24 +26,6 @@ class Game(commands.Cog):
                 response = f'Player {user.name} created. Have fun!!'
                 await channel.send(response)
 
-    @commands.command(help='Level up')
-    async def levelup(self, ctx):
-        guild = ctx.guild
-        channel = discord.utils.get(guild.channels, name=self.channel_name)
-        if ctx.channel.name == channel.name:
-            try:
-                user = User.objects(name=str(ctx.author)).get()
-                user.update(
-                    level=int(user.level) + 1
-                )
-                user.save()
-                user = User.objects(name=str(ctx.author)).get()
-                response = f'{user.name} is now of level {user.level}!!'
-                await channel.send(response)
-            except DoesNotExist:
-                response = f'{ctx.author} not register please register'
-                await channel.send(response)
-
     @commands.command(help='Shows stats')
     async def stats(self, ctx):
         guild = ctx.guild
@@ -88,7 +70,7 @@ class Game(commands.Cog):
                 await channel.send(response)
 
     @commands.command(help="Delete player data")
-    async def unregister(self.ctx):
+    async def unregister(self, ctx):
         guild = ctx.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
         if ctx.channel.name == channel.name:
