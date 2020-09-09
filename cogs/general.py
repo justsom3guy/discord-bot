@@ -18,8 +18,8 @@ class General(commands.Cog):
     async def hello(self, ctx):
         guild = ctx.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
-        response = f'Hello {channel.author} <3'
-        await channel.channel.send(response)
+        response = f'Hello {ctx.author} <3'
+        await channel.send(response)
 
 
 def setup(bot):
