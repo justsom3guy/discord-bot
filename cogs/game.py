@@ -44,7 +44,7 @@ class Game(commands.Cog):
 
                 await channel.send(response)
             except DoesNotExist:
-                response = f'{ctx.author[:-5]} not register please register'
+                response = f'{ctx.author} not register please register'
                 await channel.send(response)
 
     @commands.command(help="Find Monster", aliases=['find'])
@@ -100,7 +100,7 @@ class Game(commands.Cog):
                 response = f'Player delete :/'
                 await channel.send(response)
             except DoesNotExist:
-                response = f'Player named {ctx.author[:-5]} does not exist in database.'
+                response = f'Player named {ctx.author} does not exist in database.'
                 await channel.send(response)
 
 
