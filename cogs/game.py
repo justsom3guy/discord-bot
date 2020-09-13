@@ -11,6 +11,8 @@ class Game(commands.Cog):
         self.bot = bot
         self.channel_name = "rpg"
 
+    # Basic Player Commands
+
     @commands.command(help='Registers User', aliases=['create'])
     async def register(self, ctx):
         guild = ctx.guild
@@ -26,6 +28,19 @@ class Game(commands.Cog):
                 response = f'Player {user.name[:-5]} created. Have fun!!'
                 await channel.send(response)
 
+    @commands.command(help="Delete player data", aliases=['leave'])
+    async def unregister(self, ctx):
+        guild = ctx.guild
+        channel = discord.utils.get(guild.channels, name=self.channel_name)
+        if ctx.channel.name == channel.name:
+            try:
+                user = User.objects(name=str(ctx.author)).delete()
+                response = f'Player delete :/'
+                await channel.send(response)
+            except DoesNotExist:
+                response = f'Player named {str(ctx.author)[:-5]} does not exist in database.'
+                await channel.send(response)
+
     @commands.command(help='Shows stats')
     async def stats(self, ctx):
         guild = ctx.guild
@@ -36,10 +51,8 @@ class Game(commands.Cog):
                 response = (f'{user.name[:-5]}\'s stats-\n'
                             f'Level : {user.level}\n'
                             f'Xp : {user.xp}\n'
-                            f'Health : {user.health}\n'
                             f'Current Floor : {user.floorLevel}\n'
                             f'Max Floor : {user.floorReached}\n'
-                            f'Currently in fight : {user.inFight}\n'
                             )
 
                 await channel.send(response)
@@ -47,19 +60,7 @@ class Game(commands.Cog):
                 response = f'{str(ctx.author)[:-5]} not register please register'
                 await channel.send(response)
 
-    @commands.command(help="Find Monster", aliases=['find'])
-    async def findMonster(self, ctx):
-        guild = ctx.guild
-        channel = discord.utils.get(guild.channels, name=self.channel_name)
-        chance = bool(random.getrandbits(1))
-        if chance:
-            if ctx.channel.name == channel.name:
-                monster = random.choice(Monster.objects)
-                response = f'You found {monster.name}'
-                await channel.send(response)
-        else:
-            response = 'No monster was found try again later'
-            await channel.send(response)
+    # Basic Monster commands
 
     @commands.command(help="Create Monster", aliases=['createM'])
     @commands.has_role("MOD")
@@ -90,17 +91,64 @@ class Game(commands.Cog):
                 response = 'You didn\'t provide a name for the monster'
                 await channel.send(response)
 
-    @commands.command(help="Delete player data", aliases=['leave'])
-    async def unregister(self, ctx):
+    # Player fight commands
+
+    @commands.command(help="Find Monster", aliases=['find'])
+    async def findMonster(self, ctx):
+        guild = ctx.guild
+        channel = discord.utils.get(guild.channels, name=self.channel_name)
+        chance = bool(random.getrandbits(1))
+        if chance:
+            if ctx.channel.name == channel.name:
+                try:
+                    user = User.objects(name=str(ctx.author)).get()
+                    if user.inFight:
+                        response = 'User in fight so can not find monsters'
+                    else:
+                        monster = random.choice(Monster.objects)
+                        response = user.foundMonster(monster)
+                    await channel.send(response)
+                except DoesNotExist:
+                    response = f'{str(ctx.author)[:-5]} not register please register'
+                    await channel.send(response)
+        else:
+            response = 'No monster was found try again later'
+            await channel.send(response)
+
+    @commands.command(help='Fight Monster', aliases=['fight'])
+    async def fightMonster(self, ctx):
         guild = ctx.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
         if ctx.channel.name == channel.name:
             try:
-                user = User.objects(name=str(ctx.author)).delete()
-                response = f'Player delete :/'
+                user = User.objects(name=str(ctx.author)).get()
+                if user.inFight:
+                    user.winFight()
+                    user = User.objects(name=str(ctx.author)).get()
+                    response = f'Yay you won!!\nxp ={user.xp} and Your level = {user.level}'
+                else:
+                    response = 'Please find a monster first :3'
                 await channel.send(response)
             except DoesNotExist:
-                response = f'Player named {str(ctx.author)[:-5]} does not exist in database.'
+                response = f'{str(ctx.author)[:-5]} not register please register'
+                await channel.send(response)
+
+    @commands.command(help='Run away', aliases=['giveup', 'run'])
+    async def giveUpFight(self, ctx):
+        guild = ctx.guild
+        channel = discord.utils.get(guild.channels, name=self.channel_name)
+        if ctx.channel.name == channel.name:
+            try:
+                user = User.objects(name=str(ctx.author)).get()
+                if user.inFight:
+                    user.loseFight()
+                    user = User.objects(name=str(ctx.author)).get()
+                    response = f'Better luck next time <3\nxp ={user.xp} and Your level = {user.level}'
+                else:
+                    response = 'Please find a monster first :3'
+                await channel.send(response)
+            except DoesNotExist:
+                response = f'{str(ctx.author)[:-5]} not register please register'
                 await channel.send(response)
 
 
