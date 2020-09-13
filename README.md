@@ -15,6 +15,7 @@ In .env
 
     DISCORD_TOKEN='token'
     MONGO_HOST='mongo_uri'
+    Prefix='anything you want'
 
 ## To Start
 

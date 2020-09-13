@@ -10,8 +10,9 @@ from mongoengine import connect
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 MONGO_HOST = os.getenv('MONGO_HOST')
+prefix = os.getenv('Prefix')
 
-bot = commands.Bot(command_prefix='!', case_insensitive=True)
+bot = commands.Bot(command_prefix=prefix, case_insensitive=True)
 
 connect(host=MONGO_HOST)
 
