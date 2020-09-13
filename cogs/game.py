@@ -29,7 +29,7 @@ class Game(commands.Cog):
                 await channel.send(response)
 
     @commands.command(help="Delete player data", aliases=['leave'])
-    async def unregister(self, ctx):
+    async def deletePlayer(self, ctx):
         guild = ctx.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)
         if ctx.channel.name == channel.name:
@@ -84,7 +84,7 @@ class Game(commands.Cog):
         channel = discord.utils.get(guild.channels, name=self.channel_name)
         if ctx.channel.name == channel.name:
             if isinstance(error, commands.errors.MissingRole):
-                response = 'You dont have enough privlages'
+                response = 'You don\'t have enough privileges'
                 await channel.send(response)
 
             if isinstance(error, commands.MissingRequiredArgument):
@@ -133,7 +133,7 @@ class Game(commands.Cog):
                 response = f'{str(ctx.author)[:-5]} not register please register'
                 await channel.send(response)
 
-    @commands.command(help='Run away', aliases=['giveup', 'run'])
+    @commands.command(help='Run away', aliases=['giveUp', 'run'])
     async def giveUpFight(self, ctx):
         guild = ctx.guild
         channel = discord.utils.get(guild.channels, name=self.channel_name)

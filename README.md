@@ -1,4 +1,4 @@
-# Discord Bot - PoatoPie
+# Discord Bot - Potato-Pie
 
 A discord bot made to have fun with friends on a server
 
