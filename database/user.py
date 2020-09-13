@@ -7,13 +7,13 @@ class User(Document):
     level = IntField(default=0)  # Level of player
     xp = IntField(default=0)  # Xp of player
     floorLevel = IntField(default=0)  # Floor on which player currently is
-    # Monsters founght on the highest floor player has reached
+    # Monsters fought on the highest floor player has reached
     monsterFought = IntField(default=0)
     # Status of player i.e if he is currently in fight or not
     inFight = BooleanField(default=False)
     # Highest floor player has reached till now
     floorReached = IntField(default=0)
-    # Monster curently fighting if any
+    # Monster currently fighting if any
     monsterFighting = ReferenceField(Monster)
 
     def winFight(self):

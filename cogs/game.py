@@ -1,9 +1,11 @@
 import discord
 from discord.ext import commands
+from discord import Embed
 from database.user import User
 from database.monster import Monster
 from mongoengine import DoesNotExist
 import random
+import datetime
 
 
 class Game(commands.Cog):
@@ -48,14 +50,18 @@ class Game(commands.Cog):
         if ctx.channel.name == channel.name:
             try:
                 user = User.objects(name=str(ctx.author)).get()
-                response = (f'{user.name[:-5]}\'s stats-\n'
-                            f'Level : {user.level}\n'
-                            f'Xp : {user.xp}\n'
-                            f'Current Floor : {user.floorLevel}\n'
-                            f'Max Floor : {user.floorReached}\n'
-                            )
+                response = Embed(
+                    title=f'Stats', description=f'{user.name[:-5]}\'s stats', timestamp=datetime.datetime.utcnow(), color=discord.Color.red())
+                response.add_field(
+                    name='Level', value=f'{user.level}', inline=False)
+                response.add_field(
+                    name='Xp ', value=f'{user.xp}', inline=False)
+                response.add_field(name='Current Floor',
+                                   value=f'{user.floorLevel}', inline=False)
+                response.add_field(
+                    name='Max Floor', value=f'{user.floorReached}', inline=False)
 
-                await channel.send(response)
+                await channel.send(embed=response)
             except DoesNotExist:
                 response = f'{str(ctx.author)[:-5]} not register please register'
                 await channel.send(response)
